@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JEE 2027 Revision &amp; Practice Command Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            slate: {
+              950: '#060a12',
+              900: '#0b1120',
+              850: '#10182b',
+              800: '#162038',
+              700: '#243252',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg-page: #090612;
+      --bg-surface: #120c24;
+      --bg-surface-alt: #191130;
+      --bg-elevated: #221742;
+      --border-subtle: #2d1f54;
+      --border-strong: #462f7d;
+      --text-primary: #f3e8ff;
+      --text-secondary: #c4b5fd;
+      --text-muted: #9482c4;
+      --accent-primary: #8b5cf6;
+      --accent-bright: #a855f7;
+      --accent-deep: #7c3aed;
+    }
+
+    html.light {
+      --bg-page: #f6f3ff;
+      --bg-surface: #ffffff;
+      --bg-surface-alt: #f3e8ff;
+      --bg-elevated: #ede9fe;
+      --border-subtle: #ddd6fe;
+      --border-strong: #c4b5fd;
+      --text-primary: #1e1b4b;
+      --text-secondary: #4c1d95;
+      --text-muted: #6d28d9;
+      --accent-primary: #7c3aed;
+      --accent-bright: #8b5cf6;
+      --accent-deep: #6d28d9;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    /* Solid, high-contrast Light Mode overrides across every surface */
+    html.light header {
+      background-color: rgba(246, 243, 255, 0.98) !important;
+      border-bottom-color: #ddd6fe !important;
+      box-shadow: 0 4px 18px rgba(109, 40, 217, 0.06) !important;
+    }
+
+    html.light #unsavedBanner {
+      background-color: #fef3c7 !important;
+      border-bottom-color: #f59e0b !important;
+    }
+    html.light #unsavedBanner .text-amber-200 {
+      color: #78350f !important;
+    }
+    html.light #unsavedBanner .text-amber-300 {
+      color: #92400e !important;
+    }
+    html.light #unsavedBanner .text-amber-400 {
+      color: #b45309 !important;
+    }
+
+    html.light section,
+    html.light .workspace-panel,
+    html.light #subjectSummaryCards > div,
+    html.light #restoreModal > div,
+    html.light #resetModal > div,
+    html.light #chapterCardsContainer > div {
+      background-color: #ffffff !important;
+      border-color: #ddd6fe !important;
+      box-shadow: 0 4px 18px rgba(109, 40, 217, 0.06) !important;
+    }
+
+    html.light .bg-\[\#090612\],
+    html.light .bg-\[\#090612\]\/90,
+    html.light .bg-\[\#090612\]\/80,
+    html.light .bg-\[\#090612\]\/75 {
+      background-color: #faf8ff !important;
+      border-color: #c4b5fd !important;
+    }
+
+    html.light .bg-\[\#191130\],
+    html.light .bg-\[\#120c24\] {
+      background-color: #f3e8ff !important;
+      border-color: #c4b5fd !important;
+    }
+
+    html.light .bg-\[\#191130\]:hover,
+    html.light .hover\:bg-\[\#221742\]:hover {
+      background-color: #e9d5ff !important;
+    }
+
+    html.light h1,
+    html.light h2,
+    html.light h3,
+    html.light h4,
+    html.light .text-white {
+      color: #1e1b4b !important;
+    }
+
+    /* Keep white text strictly on primary violet/purple action buttons & active pills */
+    html.light #exportBackupBtn,
+    html.light #addCustomChapterForm button[type="submit"],
+    html.light #confirmRestoreBtn,
+    html.light #confirmResetBtn,
+    html.light #unsavedBanner button.bg-purple-500,
+    html.light .subj-btn.bg-violet-600 {
+      color: #ffffff !important;
+    }
+
+    html.light .text-purple-50,
+    html.light .text-purple-100,
+    html.light .text-purple-200,
+    html.light .text-purple-200\/80 {
+      color: #1e1b4b !important;
+    }
+
+    html.light .text-purple-300,
+    html.light .text-purple-300\/80,
+    html.light .text-purple-300\/75,
+    html.light .text-purple-300\/70 {
+      color: #3b0764 !important;
+    }
+
+    html.light .text-purple-400,
+    html.light .text-purple-400\/70,
+    html.light .text-purple-400\/65,
+    html.light .text-purple-400\/60,
+    html.light .text-purple-400\/55 {
+      color: #581c87 !important;
+    }
+
+    html.light .text-fuchsia-200,
+    html.light .text-fuchsia-300,
+    html.light .text-violet-200,
+    html.light .text-violet-300 {
+      color: #4c1d95 !important;
+    }
+
+    /* Ensure unchecked Rev 1/2/3 buttons and badges have crisp contrast in Light Mode */
+    html.light .bg-\[\#191130\] {
+      background-color: #ede9fe !important;
+      color: #3b0764 !important;
+      border-color: #b794f4 !important;
+    }
+
+    html.light .bg-\[\#090612\] {
+      background-color: #f8f5ff !important;
+      color: #2e1065 !important;
+      border-color: #c4b5fd !important;
+    }
+
+    html.light input,
+    html.light select {
+      background-color: #ffffff !important;
+      border-color: #b794f4 !important;
+      color: #1e1b4b !important;
+    }
+
+    html.light input::placeholder {
+      color: #581c87 !important;
+      opacity: 0.78;
+    }
+
+    html.light .text-purple-300,
+    html.light .text-purple-300\/80,
+    html.light .text-purple-300\/75,
+    html.light .text-purple-300\/70 {
+      color: #4c1d95 !important;
+    }
+
+    html.light .text-purple-400,
+    html.light .text-purple-400\/70,
+    html.light .text-purple-400\/65,
+    html.light .text-purple-400\/60,
+    html.light .text-purple-400\/55 {
+      color: #6d28d9 !important;
+    }
+
+    html.light .text-fuchsia-200,
+    html.light .text-fuchsia-300,
+    html.light .text-violet-200,
+    html.light .text-violet-300 {
+      color: #5b21b6 !important;
+    }
+
+    html.light input,
+    html.light select {
+      background-color: #faf8ff !important;
+      border-color: #c4b5fd !important;
+      color: #1e1b4b !important;
+    }
+
+    html.light input::placeholder {
+      color: #6d28d9 !important;
+      opacity: 0.65;
+    }
+
+    html.light #backupStatusBadge {
+      background-color: #ede9fe !important;
+      color: #4c1d95 !important;
+      border-color: #c4b5fd !important;
+    }
+
+    .mono-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-surface);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#090612] dark:bg-[#090612] light:bg-[#f8f5ff] text-purple-50 selection:bg-purple-500/30 selection:text-purple-200 transition-colors duration-200">
+
+  <!-- ======================================================================= -->
+  <!-- TOP COMMAND & BACKUP TELEMETRY BAR                                      -->
+  <!-- ======================================================================= -->
+  <header class="sticky top-0 z-40 bg-[#120c24]/95 border-b border-[#2d1f54] shadow-lg shadow-purple-950/40 backdrop-blur-md transition-colors">
+    <div class="max-w-7xl mx-auto px-4 py-3 space-y-3">
+      
+      <!-- Row 1: Brand + Backup Controls + Theme Toggle -->
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5">
+        
+        <!-- Brand & Live Backup Status -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-400/50 flex items-center justify-center text-purple-300 font-mono font-extrabold text-sm shadow-[0_0_20px_rgba(139,92,246,0.3)] shrink-0">
+            27
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="font-bold text-white tracking-tight text-sm sm:text-base">JEE 2027 Revision &amp; Practice Tracker</h1>
+              <span id="backupStatusBadge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+                Unsaved Changes
+              </span>
+            </div>
+            <p id="lastBackupText" class="text-[11px] text-purple-300/75 font-mono">Last Backup: Never exported • LocalStorage Active</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions + Theme Toggle -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Dark / Light Mode Toggle -->
+          <button id="themeToggleBtn" type="button" aria-label="Toggle Dark or Light Mode" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#191130] hover:bg-[#221742] border border-purple-500/40 text-purple-200 font-semibold text-xs font-mono transition shadow-sm shadow-purple-950/50">
+            <span id="themeIcon" class="text-purple-300">☀</span>
+            <span id="themeLabel">Light Mode</span>
+          </button>
+
+          <!-- Quick Export JSON Backup -->
+          <button id="exportBackupBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-purple-500 text-white font-bold text-xs font-mono transition shadow-md shadow-purple-900/60 border border-purple-400/30">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Export (.json)
+          </button>
+
+          <!-- Quick Import / Restore JSON Backup -->
+          <button id="importBackupBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/40 text-purple-200 font-semibold text-xs font-mono transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Restore
+          </button>
+          <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" />
+        </div>
+      </div>
+
+      <!-- Row 2: Live JEE 2027 Session Countdowns -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pt-1 border-t border-[#2d1f54]/80">
+        <div class="bg-[#090612]/90 border border-[#2d1f54] rounded-lg px-3 py-1 flex items-center justify-between">
+          <span class="text-[11px] font-mono uppercase text-purple-300 font-semibold">JEE Main S1 • Jan 20, 2027</span>
+          <span id="countdown-s1" class="mono-num text-xs font-bold text-white">--d --h --m --s</span>
+        </div>
+        <div class="bg-[#090612]/90 border border-[#2d1f54] rounded-lg px-3 py-1 flex items-center justify-between">
+          <span class="text-[11px] font-mono uppercase text-fuchsia-300 font-semibold">JEE Main S2 • Apr 02, 2027</span>
+          <span id="countdown-s2" class="mono-num text-xs font-bold text-white">--d --h --m --s</span>
+        </div>
+        <div class="hidden lg:flex bg-[#090612]/90 border border-[#2d1f54] rounded-lg px-3 py-1 items-center justify-between">
+          <span class="text-[11px] font-mono uppercase text-violet-300 font-semibold">Overall Readiness</span>
+          <span id="headerReadinessPill" class="mono-num text-xs font-bold text-purple-200">0% Ready • 0 Qs</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Unsaved Backup Reminder Banner (Appears when user edits data) -->
+  <div id="unsavedBanner" class="hidden bg-amber-950/60 border-b border-amber-500/40 px-4 py-2">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2 text-amber-200">
+        <span class="text-amber-400 font-bold">⚠ UNSAVED BACKUP REMINDER:</span>
+        <span>You have modified chapter progress since your last backup file export. Download a <code class="font-mono text-amber-300">.json</code> backup before closing this tab.</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="exportBackupJSON()" class="px-3 py-1 rounded bg-purple-500 hover:bg-purple-400 text-white font-mono font-bold text-[11px] transition shadow-sm shadow-purple-950">
+          Save Backup Now
+        </button>
+        <button onclick="document.getElementById('unsavedBanner').classList.add('hidden')" class="text-amber-400/70 hover:text-amber-200 px-1.5 font-mono">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- MAIN WORKSPACE                                                          -->
+  <!-- ======================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-4 space-y-4">
+
+    <!-- WORKSPACE SUB-NAVIGATION TABS -->
+    <nav aria-label="Workspace Views" class="flex flex-wrap items-center justify-between gap-2 bg-[#120c24] border border-[#2d1f54] rounded-xl p-1.5">
+      <div class="flex flex-wrap items-center gap-1" id="workspaceTabGroup">
+        <button data-tab="chapters" type="button" class="ws-tab-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-600 text-white font-mono font-bold text-xs transition shadow-sm shadow-purple-950">
+          <span>Chapters</span>
+          <span id="tabChaptersCount" class="px-1.5 py-0.2 rounded bg-black/25 text-[10px]">0</span>
+        </button>
+        <button data-tab="urgent-stats" type="button" class="ws-tab-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-purple-300/80 hover:text-white font-mono font-semibold text-xs transition">
+          <span>Urgent &amp; Stats</span>
+          <span id="tabUrgentBadge" class="px-1.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-200 text-[10px]">0</span>
+        </button>
+        <button data-tab="backup-sync" type="button" class="ws-tab-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-purple-300/80 hover:text-white font-mono font-semibold text-xs transition">
+          <span>Backup &amp; Sync</span>
+          <span id="tabBackupDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+        </button>
+      </div>
+
+      <div class="hidden md:flex items-center gap-3 px-2 text-[11px] font-mono text-purple-300/75">
+        <span id="totalChaptersPill">0 Pruned Chapters</span>
+        <span>•</span>
+        <span id="totalPyqQuestionsCounter" class="text-purple-200 font-semibold">0 Qs Solved</span>
+      </div>
+    </nav>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: CHAPTERS WORKSPACE (DEFAULT)                                  -->
+    <!-- ===================================================================== -->
+    <div id="view-chapters" class="workspace-panel space-y-3.5">
+      <!-- Streamlined Filter & Sort Bar -->
+      <section class="bg-[#120c24] border border-[#2d1f54] rounded-2xl p-3.5 space-y-3">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+          
+          <!-- Subject & Class Filters -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex bg-[#090612] p-1 rounded-xl border border-[#2d1f54] text-xs font-mono" id="subjectFilterGroup">
+              <button data-subj="ALL" type="button" class="subj-btn px-2.5 py-1 rounded-lg bg-violet-600 text-white font-bold transition shadow-sm shadow-purple-900/50">All</button>
+              <button data-subj="Physics" type="button" class="subj-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition">Physics</button>
+              <button data-subj="Chemistry" type="button" class="subj-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition">Chemistry</button>
+              <button data-subj="Mathematics" type="button" class="subj-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition">Maths</button>
+            </div>
+
+            <div class="flex bg-[#090612] p-1 rounded-xl border border-[#2d1f54] text-xs font-mono" id="classFilterGroup">
+              <button data-cls="ALL" type="button" class="cls-btn px-2.5 py-1 rounded-lg bg-purple-500/25 text-purple-100 border border-purple-400/40 font-semibold transition">11th + 12th</button>
+              <button data-cls="Class 11" type="button" class="cls-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition">Class 11</button>
+              <button data-cls="Class 12" type="button" class="cls-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition">Class 12</button>
+            </div>
+
+            <!-- ROI / Yield Filter -->
+            <select id="roiFilterSelect" aria-label="Filter by ROI Tag" class="bg-[#090612] border border-[#2d1f54] rounded-xl px-2.5 py-1.5 text-xs font-mono text-purple-100 focus:outline-none focus:border-purple-400">
+              <option value="ALL">ROI: All ROI</option>
+              <option value="High ROI">High ROI (95+ Score)</option>
+              <option value="Scoring">Scoring (80+ Score)</option>
+              <option value="Core">Core (65+ Score)</option>
+            </select>
+
+            <!-- Status Filter -->
+            <select id="statusFilterSelect" aria-label="Filter by Mastery Status" class="bg-[#090612] border border-[#2d1f54] rounded-xl px-2.5 py-1.5 text-xs font-mono text-purple-100 focus:outline-none focus:border-purple-400">
+              <option value="ALL">Status: All</option>
+              <option value="NEEDS_REVISION">Needs Revision (0 Rev)</option>
+              <option value="PRACTICE_PENDING">Practice Pending (No PYQs)</option>
+              <option value="STALE_REVISION">Stale Revision (&gt;14d ago)</option>
+              <option value="Exam-Ready">Exam-Ready</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Untouched">Untouched</option>
+            </select>
+          </div>
+
+          <!-- Sort + Search + Add Chapter -->
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="sortBySelect" aria-label="Sort Chapters" class="bg-[#090612] border border-purple-500/40 rounded-xl px-2.5 py-1.5 text-xs font-mono text-purple-200 font-semibold focus:outline-none focus:border-purple-400">
+              <option value="ROI_DESC">Sort: Highest ROI First</option>
+              <option value="URGENT_DESC">Sort: Most Urgent / Overdue</option>
+              <option value="PYQS_DESC">Sort: Most PYQs Solved</option>
+              <option value="REV_ASC">Sort: Least Revised First</option>
+              <option value="SYLLABUS">Sort: Subject &amp; Order</option>
+              <option value="ALPHA_ASC">Sort: Title (A–Z)</option>
+            </select>
+
+            <div class="relative flex-1 sm:w-52">
+              <input type="text" id="chapterSearchInput" placeholder="Search chapter or note..." class="w-full bg-[#090612] border border-[#2d1f54] rounded-xl pl-8 pr-2.5 py-1.5 text-xs text-white placeholder-purple-400/50 focus:outline-none focus:border-purple-400">
+              <svg class="w-3.5 h-3.5 text-purple-400/60 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+
+            <button id="toggleAddChapterBtn" type="button" class="px-3 py-1.5 rounded-xl bg-[#191130] hover:bg-[#221742] border border-purple-500/40 text-purple-300 font-mono font-semibold text-xs transition shrink-0">
+              + Add Chapter
+            </button>
+          </div>
+        </div>
+
+        <!-- Collapsible Add Custom Chapter Form -->
+        <form id="addCustomChapterForm" class="hidden pt-3 border-t border-[#2d1f54] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+          <div>
+            <label class="block text-[10px] font-mono text-purple-300/80 mb-1">Subject</label>
+            <select id="newChapSubject" class="w-full bg-[#090612] border border-[#2d1f54] rounded-lg px-2.5 py-1.5 text-xs text-white">
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Mathematics">Mathematics</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono text-purple-300/80 mb-1">Class</label>
+            <select id="newChapClass" class="w-full bg-[#090612] border border-[#2d1f54] rounded-lg px-2.5 py-1.5 text-xs text-white">
+              <option value="Class 11">Class 11</option>
+              <option value="Class 12">Class 12</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono text-purple-300/80 mb-1">ROI Tier</label>
+            <select id="newChapTag" class="w-full bg-[#090612] border border-[#2d1f54] rounded-lg px-2.5 py-1.5 text-xs text-white">
+              <option value="High ROI">High ROI</option>
+              <option value="Scoring">Scoring</option>
+              <option value="Core">Core</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono text-purple-300/80 mb-1">Chapter / Sub-topic Name</label>
+            <input type="text" id="newChapName" required placeholder="e.g., Experimental Physics Skills" class="w-full bg-[#090612] border border-[#2d1f54] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-purple-400">
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="w-full py-1.5 px-3 rounded-lg bg-violet-600 hover:bg-purple-500 text-white font-mono font-bold text-xs transition">
+              Add to Syllabus
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Compact Chapter Cards Grid -->
+      <section class="space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-purple-300/75 px-1">
+          <span id="showingCountText">Showing 0 chapters</span>
+          <span>ROI Score ranks high-weightage + quick-scoring JEE 2027 topics first</span>
+        </div>
+
+        <div id="chapterCardsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: URGENT & STATS WORKSPACE                                      -->
+    <!-- ===================================================================== -->
+    <div id="view-urgent-stats" class="workspace-panel hidden space-y-4">
+      <!-- Overall Progress + Subject Breakdown Cards -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <!-- Overall Readiness Telemetry (5 Cols) -->
+        <div class="lg:col-span-5 bg-[#120c24] border border-[#2d1f54] rounded-2xl p-4 flex flex-col justify-between space-y-3.5 shadow-lg shadow-purple-950/25">
+          <div class="flex items-center justify-between border-b border-[#2d1f54] pb-2.5">
+            <div>
+              <span class="text-[10px] font-mono uppercase tracking-wider text-purple-400">Overall Readiness</span>
+              <h2 class="text-sm font-bold text-white">2027 Syllabus Completion Telemetry</h2>
+            </div>
+            <div class="text-right">
+              <div id="overallExamReadyPct" class="mono-num text-xl font-extrabold text-purple-300">0%</div>
+              <div class="text-[10px] font-mono text-purple-300/70">EXAM-READY</div>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-purple-100">Theory Revised (≥1x)</span>
+                <span id="revCoverageText" class="text-purple-300 font-bold">0 / 0 (0%)</span>
+              </div>
+              <div class="w-full h-2 bg-[#090612] rounded-full overflow-hidden border border-[#2d1f54]">
+                <div id="revCoverageBar" style="width: 0%" class="h-full bg-gradient-to-r from-violet-500 to-purple-400 transition-all duration-500"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-purple-100">PYQs Practiced</span>
+                <span id="pyqCoverageText" class="text-fuchsia-300 font-bold">0 / 0 (0%)</span>
+              </div>
+              <div class="w-full h-2 bg-[#090612] rounded-full overflow-hidden border border-[#2d1f54]">
+                <div id="pyqCoverageBar" style="width: 0%" class="h-full bg-gradient-to-r from-purple-500 to-fuchsia-400 transition-all duration-500"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-purple-100">Chapters Completed</span>
+                <span id="modCoverageText" class="text-violet-300 font-bold">0 / 0 (0%)</span>
+              </div>
+              <div class="w-full h-2 bg-[#090612] rounded-full overflow-hidden border border-[#2d1f54]">
+                <div id="modCoverageBar" style="width: 0%" class="h-full bg-gradient-to-r from-indigo-500 to-violet-400 transition-all duration-500"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subject Breakdown Cards (7 Cols) -->
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3.5" id="subjectSummaryCards">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- DAILY URGENT QUEUE -->
+      <section class="bg-[#120c24] border border-purple-500/35 rounded-2xl p-4 space-y-3 shadow-lg shadow-purple-950/20">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></span>
+            <h3 class="font-bold text-purple-200 text-sm">DAILY URGENT ACTION QUEUE</h3>
+            <span id="urgentCountBadge" class="text-xs font-mono px-2 py-0.5 rounded bg-purple-500/15 text-purple-200 border border-purple-400/35">0 Chapters</span>
+          </div>
+          <span class="text-xs text-purple-300/70 font-mono">Auto-flags: Revised without PYQs OR Revised &gt;14 days ago</span>
+        </div>
+        <div id="urgentQueueGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 3: BACKUP & SYNC WORKSPACE                                       -->
+    <!-- ===================================================================== -->
+    <div id="view-backup-sync" class="workspace-panel hidden space-y-4">
+      <section class="bg-[#120c24] border border-[#2d1f54] rounded-2xl p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2d1f54] pb-3.5">
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-purple-400">Offline Data Safety</span>
+            <h2 class="text-base font-bold text-white">JSON Backup, Restore &amp; Close-Tab Guard</h2>
+            <p id="backupTabSubtitle" class="text-xs font-mono text-purple-300/75 mt-0.5">Last Backup: Never exported • Close-Tab Guard: Always Active</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="exportBackupJSON()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-violet-600 hover:bg-purple-500 text-white font-bold text-xs font-mono transition">
+              Export JSON Backup
+            </button>
+            <button type="button" onclick="importFileInput.click()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/40 text-purple-200 font-semibold text-xs font-mono transition">
+              Import &amp; Restore (.json)
+            </button>
+            <button type="button" id="openResetModalBtn" class="px-3 py-2 rounded-lg bg-[#090612] hover:bg-rose-950/50 border border-[#2d1f54] hover:border-rose-500/40 text-purple-300/80 hover:text-rose-300 text-xs font-mono transition">
+              Reset Syllabus
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div class="bg-[#090612] border border-[#2d1f54] rounded-xl p-3.5 space-y-1">
+            <div class="font-mono font-bold text-purple-300">1. LocalStorage Auto-Save</div>
+            <p class="text-purple-200/80 leading-relaxed">Every revision toggle, PYQ count, completion check, and formula note saves immediately in your browser.</p>
+          </div>
+          <div class="bg-[#090612] border border-[#2d1f54] rounded-xl p-3.5 space-y-1">
+            <div class="font-mono font-bold text-fuchsia-300">2. Full Overwrite or Smart Merge</div>
+            <p class="text-purple-200/80 leading-relaxed">Restoring a <code class="font-mono text-purple-200">.json</code> file lets you replace current data cleanly or merge higher progress automatically.</p>
+          </div>
+          <div class="bg-[#090612] border border-[#2d1f54] rounded-xl p-3.5 space-y-1">
+            <div class="font-mono font-bold text-amber-300">3. Always-On Close-Tab Guard</div>
+            <p class="text-purple-200/80 leading-relaxed">Browser <code class="font-mono text-purple-200">beforeunload</code> protection stays permanently active whenever you have tracker progress or unsaved changes.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ======================================================================= -->
+  <!-- RESTORE BACKUP PREVIEW & CONFIRMATION MODAL                             -->
+  <!-- ======================================================================= -->
+  <div id="restoreModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#120c24] border border-purple-400/45 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl shadow-purple-950/70">
+      <div class="flex items-center justify-between border-b border-[#2d1f54] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+          <h3 class="font-bold text-white text-base">Restore Backup File Preview</h3>
+        </div>
+        <button onclick="closeRestoreModal()" class="text-purple-300/70 hover:text-white font-mono text-sm">✕</button>
+      </div>
+
+      <div id="restorePreviewDetails" class="bg-[#090612] border border-[#2d1f54] rounded-xl p-4 space-y-2 text-xs font-mono">
+        <!-- Populated on file selection -->
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-semibold text-purple-200">Select Restore Mode:</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+          <label class="flex items-start gap-2.5 p-3 rounded-xl bg-[#090612] border border-purple-500/45 cursor-pointer">
+            <input type="radio" name="restoreMode" value="overwrite" checked class="mt-0.5 accent-purple-500">
+            <div>
+              <div class="font-bold text-purple-200">Full Overwrite (Recommended)</div>
+              <div class="text-purple-300/70 text-[11px] mt-0.5">Replaces current localStorage completely with backup snapshot.</div>
+            </div>
+          </label>
+          <label class="flex items-start gap-2.5 p-3 rounded-xl bg-[#090612] border border-[#2d1f54] cursor-pointer">
+            <input type="radio" name="restoreMode" value="merge" class="mt-0.5 accent-fuchsia-400">
+            <div>
+              <div class="font-bold text-fuchsia-200">Smart Merge</div>
+              <div class="text-purple-300/70 text-[11px] mt-0.5">Keeps higher revision/PYQ progress across current &amp; backup data.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2.5 pt-2 border-t border-[#2d1f54]">
+        <button onclick="closeRestoreModal()" class="px-4 py-2 rounded-lg bg-[#191130] hover:bg-[#221742] text-purple-200 font-mono text-xs">
+          Cancel
+        </button>
+        <button id="confirmRestoreBtn" class="px-4 py-2 rounded-lg bg-violet-600 hover:bg-purple-500 text-white font-mono font-bold text-xs transition">
+          Confirm &amp; Restore Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- RESET ALL DATA CONFIRMATION MODAL                                       -->
+  <!-- ======================================================================= -->
+  <div id="resetModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#120c24] border border-rose-500/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center gap-2 text-rose-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <h3 class="font-bold text-white text-base">Reset All Tracker Progress?</h3>
+      </div>
+      <p class="text-xs text-purple-200/80 leading-relaxed">
+        This will wipe all your revision checkboxes, PYQ question counts, custom chapters, and personal formula notes back to a clean JEE Main 2027 syllabus. Make sure you have exported a <code class="font-mono text-amber-300">.json</code> backup first!
+      </p>
+      <div class="flex justify-end gap-2.5 pt-2 border-t border-[#2d1f54]">
+        <button onclick="document.getElementById('resetModal').classList.add('hidden')" class="px-4 py-2 rounded-lg bg-[#191130] hover:bg-[#221742] text-purple-200 font-mono text-xs">
+          Cancel
+        </button>
+        <button id="confirmResetBtn" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-mono font-bold text-xs transition">
+          Yes, Reset Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastBox" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    // =========================================================================
+    // 1. COMPLETE PRUNED JEE MAIN 2027 SYLLABUS DATABASE (NTA LATEST SYLLABUS)
+    // Excluded deleted units: Communication Systems, Transistors, Carnot Engine,
+    // s-Block, Hydrogen, Environmental Chem, Polymers, Chem in Everyday Life,
+    // Metallurgy, Surface Chem, Solid State, Gaseous State, Mathematical Induction,
+    // Mathematical Reasoning, Planes in 3D, Tangent & Normal.
+    // =========================================================================
+    const STORAGE_KEY = 'jee2027_cmd_tracker_state_v2';
+    const META_KEY = 'jee2027_cmd_tracker_meta_v2';
+    const THEME_KEY = 'jee2027_cmd_tracker_theme_v1';
+    const INITIAL_SYLLABUS = [
+      // ==================== PHYSICS: CLASS 11 ====================
+      { id: 'p11_1', subject: 'Physics', cls: 'Class 11', tag: 'Core', name: 'Units, Dimensions & Experimental Measurement' },
+      { id: 'p11_2', subject: 'Physics', cls: 'Class 11', tag: 'Core', name: 'Kinematics (1D & 2D Motion, Relative Velocity)' },
+      { id: 'p11_3', subject: 'Physics', cls: 'Class 11', tag: 'Core', name: 'Laws of Motion & Friction' },
+      { id: 'p11_4', subject: 'Physics', cls: 'Class 11', tag: 'High ROI', name: 'Work, Energy & Power' },
+      { id: 'p11_5', subject: 'Physics', cls: 'Class 11', tag: 'Core', name: 'Centre of Mass, Momentum & Collisions' },
+      { id: 'p11_6', subject: 'Physics', cls: 'Class 11', tag: 'High ROI', name: 'Rotational Motion & Moment of Inertia' },
+      { id: 'p11_7', subject: 'Physics', cls: 'Class 11', tag: 'Scoring', name: 'Gravitation & Satellite Motion' },
+      { id: 'p11_8', subject: 'Physics', cls: 'Class 11', tag: 'Scoring', name: 'Mechanical Properties of Solids & Fluids' },
+      { id: 'p11_9', subject: 'Physics', cls: 'Class 11', tag: 'High ROI', name: 'Thermal Properties, KTG & Thermodynamics' },
+      { id: 'p11_10', subject: 'Physics', cls: 'Class 11', tag: 'Core', name: 'Oscillations (SHM) & Mechanical Waves' },
+
+      // ==================== PHYSICS: CLASS 12 ====================
+      { id: 'p12_1', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Electrostatics (Electric Field, Flux & Potential)' },
+      { id: 'p12_2', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Capacitance & Dielectrics' },
+      { id: 'p12_3', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Current Electricity & Electrical Instruments' },
+      { id: 'p12_4', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Moving Charges & Magnetism' },
+      { id: 'p12_5', subject: 'Physics', cls: 'Class 12', tag: 'Scoring', name: 'Magnetism & Matter (Dia/Para/Ferro)' },
+      { id: 'p12_6', subject: 'Physics', cls: 'Class 12', tag: 'Core', name: 'Electromagnetic Induction (EMI)' },
+      { id: 'p12_7', subject: 'Physics', cls: 'Class 12', tag: 'Scoring', name: 'Alternating Current (AC Circuits & Resonance)' },
+      { id: 'p12_8', subject: 'Physics', cls: 'Class 12', tag: 'Scoring', name: 'Electromagnetic Waves' },
+      { id: 'p12_9', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Ray Optics & Optical Instruments' },
+      { id: 'p12_10', subject: 'Physics', cls: 'Class 12', tag: 'Scoring', name: 'Wave Optics (YDSE, Diffraction, Polarization)' },
+      { id: 'p12_11', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Dual Nature of Radiation & Matter' },
+      { id: 'p12_12', subject: 'Physics', cls: 'Class 12', tag: 'High ROI', name: 'Atoms & Nuclei (Radioactivity Removed)' },
+      { id: 'p12_13', subject: 'Physics', cls: 'Class 12', tag: 'Scoring', name: 'Semiconductor Electronics & Logic Gates' },
+
+      // ==================== CHEMISTRY: CLASS 11 ====================
+      { id: 'c11_1', subject: 'Chemistry', cls: 'Class 11', tag: 'Core', name: 'Some Basic Concepts of Chemistry (Mole Concept)' },
+      { id: 'c11_2', subject: 'Chemistry', cls: 'Class 11', tag: 'High ROI', name: 'Atomic Structure & Quantum Numbers' },
+      { id: 'c11_3', subject: 'Chemistry', cls: 'Class 11', tag: 'Scoring', name: 'Classification of Elements & Periodicity' },
+      { id: 'c11_4', subject: 'Chemistry', cls: 'Class 11', tag: 'High ROI', name: 'Chemical Bonding & Molecular Structure (VSEPR/MOT)' },
+      { id: 'c11_5', subject: 'Chemistry', cls: 'Class 11', tag: 'High ROI', name: 'Chemical Thermodynamics & Thermochemistry' },
+      { id: 'c11_6', subject: 'Chemistry', cls: 'Class 11', tag: 'Core', name: 'Chemical & Ionic Equilibrium' },
+      { id: 'c11_7', subject: 'Chemistry', cls: 'Class 11', tag: 'Scoring', name: 'Redox Reactions' },
+      { id: 'c11_8', subject: 'Chemistry', cls: 'Class 11', tag: 'Scoring', name: 'p-Block Elements (Group 13 & 14 General Trends)' },
+      { id: 'c11_9', subject: 'Chemistry', cls: 'Class 11', tag: 'High ROI', name: 'Organic Chemistry: Purification, GOC & Isomerism' },
+      { id: 'c11_10', subject: 'Chemistry', cls: 'Class 11', tag: 'High ROI', name: 'Hydrocarbons (Alkanes, Alkenes, Alkynes, Benzene)' },
+
+      // ==================== CHEMISTRY: CLASS 12 ====================
+      { id: 'c12_1', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'Solutions & Colligative Properties' },
+      { id: 'c12_2', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'Electrochemistry & Nernst Equation' },
+      { id: 'c12_3', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'Chemical Kinetics & Arrhenius Theory' },
+      { id: 'c12_4', subject: 'Chemistry', cls: 'Class 12', tag: 'Scoring', name: 'p-Block Elements (Group 15 to 18 Trends)' },
+      { id: 'c12_5', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'd- and f-Block Elements (KMnO4, K2Cr2O7)' },
+      { id: 'c12_6', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'Coordination Compounds (CFT, Isomerism, VBT)' },
+      { id: 'c12_7', subject: 'Chemistry', cls: 'Class 12', tag: 'Core', name: 'Haloalkanes & Haloarenes' },
+      { id: 'c12_8', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'Alcohols, Phenols & Ethers' },
+      { id: 'c12_9', subject: 'Chemistry', cls: 'Class 12', tag: 'High ROI', name: 'Aldehydes, Ketones & Carboxylic Acids' },
+      { id: 'c12_10', subject: 'Chemistry', cls: 'Class 12', tag: 'Scoring', name: 'Organic Compounds Containing Nitrogen (Amines)' },
+      { id: 'c12_11', subject: 'Chemistry', cls: 'Class 12', tag: 'Scoring', name: 'Biomolecules & Principles of Practical Chemistry' },
+
+      // ==================== MATHEMATICS: CLASS 11 ====================
+      { id: 'm11_1', subject: 'Mathematics', cls: 'Class 11', tag: 'Scoring', name: 'Sets, Relations & Functions (Basic)' },
+      { id: 'm11_2', subject: 'Mathematics', cls: 'Class 11', tag: 'Core', name: 'Complex Numbers & Quadratic Equations' },
+      { id: 'm11_3', subject: 'Mathematics', cls: 'Class 11', tag: 'High ROI', name: 'Permutations & Combinations' },
+      { id: 'm11_4', subject: 'Mathematics', cls: 'Class 11', tag: 'High ROI', name: 'Binomial Theorem & Its Simple Applications' },
+      { id: 'm11_5', subject: 'Mathematics', cls: 'Class 11', tag: 'High ROI', name: 'Sequences & Series (AP, GP, AM-GM)' },
+      { id: 'm11_6', subject: 'Mathematics', cls: 'Class 11', tag: 'Core', name: 'Straight Lines & Pair of Straight Lines' },
+      { id: 'm11_7', subject: 'Mathematics', cls: 'Class 11', tag: 'High ROI', name: 'Conic Sections (Circles, Parabola, Ellipse, Hyperbola)' },
+      { id: 'm11_8', subject: 'Mathematics', cls: 'Class 11', tag: 'Core', name: 'Trigonometry (Identities & Equations)' },
+      { id: 'm11_9', subject: 'Mathematics', cls: 'Class 11', tag: 'Scoring', name: 'Statistics & Basic Probability' },
+
+      // ==================== MATHEMATICS: CLASS 12 ====================
+      { id: 'm12_1', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Relations, Functions & Inverse Trigonometry (ITF)' },
+      { id: 'm12_2', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Matrices & Determinants (System of Equations)' },
+      { id: 'm12_3', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Limits, Continuity & Differentiability' },
+      { id: 'm12_4', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Applications of Derivatives (Monotonicity, Maxima/Minima)' },
+      { id: 'm12_5', subject: 'Mathematics', cls: 'Class 12', tag: 'Core', name: 'Indefinite Integration' },
+      { id: 'm12_6', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Definite Integration & Area Under Curves' },
+      { id: 'm12_7', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Differential Equations' },
+      { id: 'm12_8', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Vector Algebra' },
+      { id: 'm12_9', subject: 'Mathematics', cls: 'Class 12', tag: 'High ROI', name: 'Three-Dimensional Geometry (Lines & Shortest Distance)' },
+      { id: 'm12_10', subject: 'Mathematics', cls: 'Class 12', tag: 'Scoring', name: 'Probability (Conditional, Bayes, Bernoulli)' }
+    ];
+
+    function buildFreshChapters() {
+      return INITIAL_SYLLABUS.map(item => ({
+        ...item,
+        rev1: false,
+        rev2: false,
+        rev3: false,
+        pyqDone: false,
+        pyqCount: 0,
+        completed: false,
+        status: 'Untouched', // 'Untouched' | 'In Progress' | 'Revised' | 'Exam-Ready'
+        lastRevised: null,   // 'YYYY-MM-DD' or null
+        note: ''
+      }));
+    }
+
+    // =========================================================================
+    // 2. APPLICATION STATE & PERSISTENCE
+    // =========================================================================
+    let appState = {
+      theme: 'dark', // 'dark' | 'light'
+      activeTab: 'chapters', // 'chapters' | 'urgent-stats' | 'backup-sync'
+      chapters: [],
+      meta: {
+        lastBackupTimestamp: null,
+        hasUnsavedChanges: false
+      },
+      filters: {
+        subject: 'ALL',
+        cls: 'ALL',
+        roi: 'ALL',
+        status: 'ALL',
+        sortBy: 'ROI_DESC',
+        search: ''
+      },
+      pendingRestorePayload: null
+    };
+
+    // Compute a deterministic ROI score (0-100) for sorting & scannable ROI badges
+    function getChapterRoiScore(ch, index = 0) {
+      const baseByTag = {
+        'High ROI': 92,
+        'Scoring': 81,
+        'Core': 68
+      };
+      let score = baseByTag[ch.tag] ?? 72;
+      if (/electrostatics|current electricity|rotational|thermodynamics|modern|dual nature|atoms|optics|chemical bonding|coordination|electrochemistry|chemical kinetics|goc|aldehydes|matrices|definite integration|differential equations|vector|3d geometry|conic|probability/i.test(ch.name)) {
+        score = Math.min(99, score + 5);
+      }
+      // Slight deterministic tie-breaker so chapters keep stable order
+      const tie = Math.max(0, 4 - (index % 5));
+      return Math.min(99, score + tie);
+    }
+
+    function getUrgencyPriority(ch) {
+      const hasRev = ch.rev1 || ch.rev2 || ch.rev3;
+      const days = getDaysAgo(ch.lastRevised);
+      if (hasRev && !ch.pyqDone) return 300 + getChapterRoiScore(ch);
+      if (hasRev && days !== null && days > 14) return 200 + Math.min(99, days);
+      if (!hasRev && !ch.completed) return 100 + getChapterRoiScore(ch);
+      return getChapterRoiScore(ch);
+    }
+
+    function setWorkspaceTab(tabName) {
+      appState.activeTab = tabName;
+      document.querySelectorAll('.workspace-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `view-${tabName}`);
+      });
+
+      document.querySelectorAll('.ws-tab-btn').forEach(btn => {
+        const active = btn.dataset.tab === tabName;
+        btn.className = active
+          ? 'ws-tab-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-600 text-white font-mono font-bold text-xs transition shadow-sm shadow-purple-950'
+          : 'ws-tab-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-purple-300/80 hover:text-white font-mono font-semibold text-xs transition';
+      });
+      applyTheme(appState.theme);
+    }
+
+    document.querySelectorAll('.ws-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => setWorkspaceTab(btn.dataset.tab));
+    });
+
+    function applyTheme(theme) {
+      const htmlEl = document.documentElement;
+      const isLight = theme === 'light';
+      appState.theme = isLight ? 'light' : 'dark';
+      htmlEl.classList.toggle('light', isLight);
+      htmlEl.classList.toggle('dark', !isLight);
+
+      const iconEl = document.getElementById('themeIcon');
+      const labelEl = document.getElementById('themeLabel');
+      if (iconEl && labelEl) {
+        iconEl.textContent = isLight ? '☾' : '☀';
+        labelEl.textContent = isLight ? 'Dark Mode' : 'Light Mode';
+      }
+
+      document.querySelectorAll('header').forEach(el => {
+        el.classList.toggle('bg-[#120c24]/95', !isLight);
+        el.classList.toggle('border-[#2d1f54]', !isLight);
+        el.classList.toggle('bg-white/95', isLight);
+        el.classList.toggle('border-purple-200', isLight);
+      });
+
+      document.querySelectorAll('section, nav, .workspace-panel > div, .bg-\\[\\#120c24\\], .bg-white').forEach(el => {
+        if (el.tagName === 'SECTION' || el.tagName === 'NAV') {
+          el.classList.toggle('bg-[#120c24]', !isLight);
+          el.classList.toggle('border-[#2d1f54]', !isLight);
+          el.classList.toggle('bg-white', isLight);
+          el.classList.toggle('border-purple-200', isLight);
+        }
+      });
+
+      try {
+        localStorage.setItem(THEME_KEY, appState.theme);
+      } catch (e) {
+        console.warn('Theme persistence skipped:', e);
+      }
+    }
+
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+      applyTheme(appState.theme === 'dark' ? 'light' : 'dark');
+    });
+
+    function loadAppState() {
+      try {
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          appState.theme = savedTheme;
+        }
+      } catch (e) {
+        appState.theme = 'dark';
+      }
+      applyTheme(appState.theme);
+
+      try {
+        const savedChapters = localStorage.getItem(STORAGE_KEY);
+        const savedMeta = localStorage.getItem(META_KEY);
+        if (savedChapters) {
+          const parsed = JSON.parse(savedChapters);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            appState.chapters = parsed.map(ch => ({
+              ...ch,
+              completed: Boolean(ch.completed !== undefined ? ch.completed : ch.moduleDone)
+            }));
+          } else {
+            appState.chapters = buildFreshChapters();
+          }
+        } else {
+          appState.chapters = buildFreshChapters();
+        }
+
+        if (savedMeta) {
+          const parsedMeta = JSON.parse(savedMeta);
+          appState.meta = {
+            lastBackupTimestamp: parsedMeta.lastBackupTimestamp || null,
+            hasUnsavedChanges: Boolean(parsedMeta.hasUnsavedChanges)
+          };
+        }
+      } catch (e) {
+        console.error('Error loading localStorage:', e);
+        appState.chapters = buildFreshChapters();
+      }
+    }
+
+    function persistState(markDirty = true) {
+      if (markDirty) {
+        appState.meta.hasUnsavedChanges = true;
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState.chapters));
+        localStorage.setItem(META_KEY, JSON.stringify(appState.meta));
+      } catch (e) {
+        showToast('Warning: LocalStorage quota issue. Export backup now!', 'rose');
+      }
+      updateBackupStatusUI();
+    }
+
+    // =========================================================================
+    // 3. TAB CLOSE / UNLOAD GUARD (`beforeunload`) - ALWAYS ACTIVE
+    // =========================================================================
+    window.addEventListener('beforeunload', (e) => {
+      const hasAnyProgress = appState.chapters.some(
+        c => c.rev1 || c.rev2 || c.rev3 || c.pyqDone || c.completed || (Number(c.pyqCount) || 0) > 0 || (c.note && c.note.trim().length > 0)
+      );
+      if (appState.meta.hasUnsavedChanges || hasAnyProgress) {
+        const msg = 'Are you sure you want to leave? Make sure you have saved your JEE 2027 JSON backup file!';
+        e.preventDefault();
+        e.returnValue = msg;
+        return msg;
+      }
+    });
+
+    // =========================================================================
+    // 4. BULLETPROOF JSON BACKUP EXPORT & RESTORE SYSTEM
+    // =========================================================================
+    function updateBackupStatusUI() {
+      const badge = document.getElementById('backupStatusBadge');
+      const lastText = document.getElementById('lastBackupText');
+      const tabSubtitle = document.getElementById('backupTabSubtitle');
+      const tabDot = document.getElementById('tabBackupDot');
+      const banner = document.getElementById('unsavedBanner');
+
+      if (appState.meta.hasUnsavedChanges) {
+        badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/40';
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>Unsaved Changes`;
+        if (tabDot) tabDot.className = 'w-2 h-2 rounded-full bg-amber-400';
+        banner.classList.remove('hidden');
+      } else {
+        badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/40';
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span>Backup Synced`;
+        if (tabDot) tabDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        banner.classList.add('hidden');
+      }
+
+      const statusSummary = appState.meta.lastBackupTimestamp
+        ? `Last Backup: ${appState.meta.lastBackupTimestamp} • LocalStorage Synced`
+        : `Last Backup: Never exported • LocalStorage Active`;
+
+      lastText.textContent = statusSummary;
+      if (tabSubtitle) {
+        tabSubtitle.textContent = `${statusSummary} • Close-Tab Guard: Always Active`;
+      }
+    }
+
+    function exportBackupJSON() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+
+      const readableTime = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+      const filename = `jee-2027-tracker-backup-${yyyy}-${mm}-${dd}.json`;
+
+      const backupPayload = {
+        app: 'JEE 2027 Revision & Practice Command Tracker',
+        schemaVersion: 2,
+        exportedAt: now.toISOString(),
+        exportedAtReadable: readableTime,
+        summary: {
+          totalChapters: appState.chapters.length,
+          examReadyCount: appState.chapters.filter(c => c.status === 'Exam-Ready').length,
+          totalPyqsSolved: appState.chapters.reduce((s, c) => s + (Number(c.pyqCount) || 0), 0)
+        },
+        chapters: appState.chapters
+      };
+
+      const blob = new Blob([JSON.stringify(backupPayload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      appState.meta.lastBackupTimestamp = readableTime;
+      appState.meta.hasUnsavedChanges = false;
+      persistState(false);
+      showToast(`Backup downloaded: ${filename}`, 'emerald');
+    }
+
+    document.getElementById('exportBackupBtn').addEventListener('click', exportBackupJSON);
+
+    // Import / Restore Flow
+    const importFileInput = document.getElementById('importFileInput');
+    document.getElementById('importBackupBtn').addEventListener('click', () => {
+      importFileInput.value = '';
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (!parsed || !Array.isArray(parsed.chapters) || parsed.chapters.length === 0) {
+            throw new Error('Invalid backup structure: missing chapters array.');
+          }
+
+          // Validate & normalize each chapter record safely
+          const sanitizedChapters = parsed.chapters.map((ch, idx) => {
+            if (!ch.name || !ch.subject) {
+              throw new Error(`Corrupt chapter entry at index ${idx}.`);
+            }
+            return {
+              id: String(ch.id || `imp_${Date.now()}_${idx}`),
+              subject: ['Physics', 'Chemistry', 'Mathematics'].includes(ch.subject) ? ch.subject : 'Physics',
+              cls: ch.cls === 'Class 12' ? 'Class 12' : 'Class 11',
+              tag: ch.tag || 'Core',
+              name: String(ch.name),
+              rev1: Boolean(ch.rev1),
+              rev2: Boolean(ch.rev2),
+              rev3: Boolean(ch.rev3),
+              pyqDone: Boolean(ch.pyqDone),
+              pyqCount: Math.max(0, parseInt(ch.pyqCount, 10) || 0),
+              completed: Boolean(ch.completed !== undefined ? ch.completed : ch.moduleDone),
+              status: ['Untouched', 'In Progress', 'Revised', 'Exam-Ready'].includes(ch.status) ? ch.status : 'Untouched',
+              lastRevised: ch.lastRevised ? String(ch.lastRevised) : null,
+              note: ch.note ? String(ch.note) : ''
+            };
+          });
+
+          appState.pendingRestorePayload = {
+            exportedAtReadable: parsed.exportedAtReadable || parsed.exportedAt || 'Unknown timestamp',
+            chapters: sanitizedChapters
+          };
+
+          const revCount = sanitizedChapters.filter(c => c.rev1 || c.rev2 || c.rev3).length;
+          const pyqDoneCount = sanitizedChapters.filter(c => c.pyqDone).length;
+          const readyCount = sanitizedChapters.filter(c => c.status === 'Exam-Ready').length;
+          const totalQs = sanitizedChapters.reduce((acc, c) => acc + c.pyqCount, 0);
+
+          document.getElementById('restorePreviewDetails').innerHTML = `
+            <div class="flex justify-between"><span class="text-slate-400">File Name:</span><span class="text-white">${file.name}</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Exported At:</span><span class="text-cyan-300">${appState.pendingRestorePayload.exportedAtReadable}</span></div>
+            <div class="border-t border-slate-800 my-1.5"></div>
+            <div class="flex justify-between"><span class="text-slate-400">Chapters in Backup:</span><span class="text-white font-bold">${sanitizedChapters.length}</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Revised (≥1x):</span><span class="text-cyan-400">${revCount} chapters</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">PYQs Completed:</span><span class="text-emerald-400">${pyqDoneCount} chapters (${totalQs} Qs)</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Exam-Ready Chapters:</span><span class="text-amber-400">${readyCount} chapters</span></div>
+          `;
+
+          document.getElementById('restoreModal').classList.remove('hidden');
+        } catch (err) {
+          showToast(`Restore Failed: ${err.message}`, 'rose');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    function closeRestoreModal() {
+      appState.pendingRestorePayload = null;
+      document.getElementById('restoreModal').classList.add('hidden');
+    }
+
+    document.getElementById('confirmRestoreBtn').addEventListener('click', () => {
+      if (!appState.pendingRestorePayload) return;
+      const mode = document.querySelector('input[name="restoreMode"]:checked').value;
+      const incoming = appState.pendingRestorePayload.chapters;
+
+      if (mode === 'overwrite') {
+        appState.chapters = incoming;
+      } else {
+        // Smart Merge by ID or Name
+        const map = new Map(appState.chapters.map(c => [c.id, c]));
+        incoming.forEach(inc => {
+          if (map.has(inc.id)) {
+            const cur = map.get(inc.id);
+            const statusRank = { 'Untouched': 0, 'In Progress': 1, 'Revised': 2, 'Exam-Ready': 3 };
+            const bestStatus = statusRank[inc.status] >= statusRank[cur.status] ? inc.status : cur.status;
+            map.set(inc.id, {
+              ...cur,
+              rev1: cur.rev1 || inc.rev1,
+              rev2: cur.rev2 || inc.rev2,
+              rev3: cur.rev3 || inc.rev3,
+              pyqDone: cur.pyqDone || inc.pyqDone,
+              pyqCount: Math.max(cur.pyqCount, inc.pyqCount),
+              completed: cur.completed || inc.completed,
+              status: bestStatus,
+              lastRevised: inc.lastRevised || cur.lastRevised,
+              note: inc.note || cur.note
+            });
+          } else {
+            map.set(inc.id, inc);
+          }
+        });
+        appState.chapters = Array.from(map.values());
+      }
+
+      appState.meta.lastBackupTimestamp = `Restored (${appState.pendingRestorePayload.exportedAtReadable})`;
+      appState.meta.hasUnsavedChanges = false;
+      persistState(false);
+      closeRestoreModal();
+      renderAll();
+      applyTheme(appState.theme);
+      showToast(`Successfully restored ${incoming.length} chapters!`, 'purple');
+    });
+
+    // Reset Modal Handlers
+    document.getElementById('openResetModalBtn').addEventListener('click', () => {
+      document.getElementById('resetModal').classList.remove('hidden');
+    });
+    document.getElementById('confirmResetBtn').addEventListener('click', () => {
+      appState.chapters = buildFreshChapters();
+      appState.meta.hasUnsavedChanges = false;
+      appState.meta.lastBackupTimestamp = null;
+      persistState(false);
+      document.getElementById('resetModal').classList.add('hidden');
+      renderAll();
+      applyTheme(appState.theme);
+      showToast('Tracker reset to clean JEE 2027 syllabus', 'amber');
+    });
+
+    // =========================================================================
+    // 5. LIVE COUNTDOWNS TO JEE MAIN 2027
+    // =========================================================================
+    function updateCountdowns() {
+      const now = Date.now();
+      const s1 = new Date('2027-01-20T09:00:00+05:30').getTime();
+      const s2 = new Date('2027-04-02T09:00:00+05:30').getTime();
+
+      function fmt(target) {
+        const diff = target - now;
+        if (diff <= 0) return 'WINDOW LIVE';
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff / 3600000) % 24);
+        const m = Math.floor((diff / 60000) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        return `${String(d).padStart(2, '0')}d ${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+      }
+
+      document.getElementById('countdown-s1').textContent = fmt(s1);
+      document.getElementById('countdown-s2').textContent = fmt(s2);
+    }
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+
+    // =========================================================================
+    // 6. CHAPTER MUTATION & AUTO-STATUS ENGINE
+    // =========================================================================
+    function getTodayISO() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getDaysAgo(dateStr) {
+      if (!dateStr) return null;
+      const past = new Date(dateStr + 'T00:00:00');
+      const today = new Date(getTodayISO() + 'T00:00:00');
+      const diff = Math.floor((today - past) / 86400000);
+      return Math.max(0, diff);
+    }
+
+    function autoComputeStatus(ch) {
+      const anyRev = ch.rev1 || ch.rev2 || ch.rev3;
+      if (ch.completed || (anyRev && ch.pyqDone)) {
+        ch.status = ch.completed && anyRev && ch.pyqDone ? 'Exam-Ready' : (ch.completed ? 'Exam-Ready' : 'Revised');
+      } else if (anyRev || ch.pyqDone || ch.pyqCount > 0) {
+        ch.status = 'In Progress';
+      } else {
+        ch.status = 'Untouched';
+      }
+    }
+
+    function toggleRev(id, revKey) {
+      const ch = appState.chapters.find(c => c.id === id);
+      if (!ch) return;
+      ch[revKey] = !ch[revKey];
+      if (ch[revKey]) {
+        ch.lastRevised = getTodayISO();
+      } else if (!ch.rev1 && !ch.rev2 && !ch.rev3) {
+        ch.lastRevised = null;
+      }
+      autoComputeStatus(ch);
+      persistState(true);
+      renderAll();
+    }
+
+    function togglePractice(id, field) {
+      const ch = appState.chapters.find(c => c.id === id);
+      if (!ch) return;
+      ch[field] = !ch[field];
+      if (field === 'completed' && ch.completed && !ch.lastRevised && (ch.rev1 || ch.rev2 || ch.rev3)) {
+        ch.lastRevised = getTodayISO();
+      }
+      autoComputeStatus(ch);
+      persistState(true);
+      renderAll();
+    }
+
+    function updatePyqCount(id, val) {
+      const ch = appState.chapters.find(c => c.id === id);
+      if (!ch) return;
+      const num = Math.max(0, parseInt(val, 10) || 0);
+      ch.pyqCount = num;
+      if (num > 0 && !ch.pyqDone) {
+        ch.pyqDone = true;
+      }
+      autoComputeStatus(ch);
+      persistState(true);
+      renderAnalyticsOnly();
+    }
+
+    function updateStatusDirect(id, newStatus) {
+      const ch = appState.chapters.find(c => c.id === id);
+      if (!ch) return;
+      ch.status = newStatus;
+      if (newStatus === 'Exam-Ready') {
+        ch.completed = true;
+      } else if (newStatus === 'Untouched') {
+        ch.completed = false;
+      }
+      if ((newStatus === 'Revised' || newStatus === 'Exam-Ready') && !ch.lastRevised) {
+        ch.lastRevised = getTodayISO();
+      }
+      persistState(true);
+      renderAll();
+    }
+
+    function updateChapterNote(id, text) {
+      const ch = appState.chapters.find(c => c.id === id);
+      if (!ch) return;
+      ch.note = text;
+      persistState(true);
+    }
+
+    function stampRevisedToday(id) {
+      const ch = appState.chapters.find(c => c.id === id);
+      if (!ch) return;
+      if (!ch.rev1) ch.rev1 = true;
+      else if (!ch.rev2) ch.rev2 = true;
+      else ch.rev3 = true;
+      ch.lastRevised = getTodayISO();
+      autoComputeStatus(ch);
+      persistState(true);
+      renderAll();
+      showToast(`Refreshed "${ch.name}" — Stamped Today`, 'emerald');
+    }
+
+    // Add Custom Chapter
+    document.getElementById('toggleAddChapterBtn').addEventListener('click', () => {
+      document.getElementById('addCustomChapterForm').classList.toggle('hidden');
+    });
+
+    document.getElementById('addCustomChapterForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('newChapName').value.trim();
+      if (!name) return;
+      const newChapter = {
+        id: 'custom_' + Date.now(),
+        subject: document.getElementById('newChapSubject').value,
+        cls: document.getElementById('newChapClass').value,
+        tag: document.getElementById('newChapTag').value,
+        name,
+        rev1: false,
+        rev2: false,
+        rev3: false,
+        pyqDone: false,
+        pyqCount: 0,
+        completed: false,
+        status: 'Untouched',
+        lastRevised: null,
+        note: ''
+      };
+      appState.chapters.unshift(newChapter);
+      document.getElementById('newChapName').value = '';
+      persistState(true);
+      renderAll();
+      showToast(`Added "${name}" to ${newChapter.subject}`, 'emerald');
+    });
+
+    // =========================================================================
+    // 7. ANALYTICS, URGENT QUEUE & CHAPTER LIST RENDERERS
+    // =========================================================================
+    function renderAnalyticsOnly() {
+      const total = appState.chapters.length;
+      const revDone = appState.chapters.filter(c => c.rev1 || c.rev2 || c.rev3).length;
+      const pyqDone = appState.chapters.filter(c => c.pyqDone).length;
+      const completedCount = appState.chapters.filter(c => c.completed).length;
+      const examReady = appState.chapters.filter(c => c.status === 'Exam-Ready' || c.completed).length;
+      const totalPyqQs = appState.chapters.reduce((sum, c) => sum + (Number(c.pyqCount) || 0), 0);
+
+      const pct = (n) => total ? Math.round((n / total) * 100) : 0;
+
+      document.getElementById('totalChaptersPill').textContent = `${total} Pruned Chapters`;
+      document.getElementById('tabChaptersCount').textContent = String(total);
+      document.getElementById('headerReadinessPill').textContent = `${pct(examReady)}% Ready • ${totalPyqQs.toLocaleString()} Qs`;
+      document.getElementById('overallExamReadyPct').textContent = `${pct(examReady)}%`;
+
+      document.getElementById('revCoverageText').textContent = `${revDone} / ${total} (${pct(revDone)}%)`;
+      document.getElementById('revCoverageBar').style.width = `${pct(revDone)}%`;
+
+      document.getElementById('pyqCoverageText').textContent = `${pyqDone} / ${total} (${pct(pyqDone)}%)`;
+      document.getElementById('pyqCoverageBar').style.width = `${pct(pyqDone)}%`;
+
+      document.getElementById('modCoverageText').textContent = `${completedCount} / ${total} (${pct(completedCount)}%)`;
+      document.getElementById('modCoverageBar').style.width = `${pct(completedCount)}%`;
+
+      document.getElementById('totalPyqQuestionsCounter').textContent = `${totalPyqQs.toLocaleString()} Qs Solved`;
+
+      // Subject Breakdown Cards
+      const subjects = [
+        { name: 'Physics', accent: 'purple', bar: 'bg-gradient-to-r from-violet-500 to-purple-400', text: 'text-purple-300', border: 'border-purple-500/35' },
+        { name: 'Chemistry', accent: 'fuchsia', bar: 'bg-gradient-to-r from-purple-500 to-fuchsia-400', text: 'text-fuchsia-300', border: 'border-fuchsia-500/35' },
+        { name: 'Mathematics', accent: 'indigo', bar: 'bg-gradient-to-r from-indigo-500 to-violet-400', text: 'text-violet-300', border: 'border-violet-500/35' }
+      ];
+
+      document.getElementById('subjectSummaryCards').innerHTML = subjects.map(s => {
+        const list = appState.chapters.filter(c => c.subject === s.name);
+        const sTotal = list.length;
+        const sRev = list.filter(c => c.rev1 || c.rev2 || c.rev3).length;
+        const sPyq = list.filter(c => c.pyqDone).length;
+        const sReady = list.filter(c => c.status === 'Exam-Ready').length;
+        const sQs = list.reduce((sum, c) => sum + (Number(c.pyqCount) || 0), 0);
+        const revPct = sTotal ? Math.round((sRev / sTotal) * 100) : 0;
+        const pyqPct = sTotal ? Math.round((sPyq / sTotal) * 100) : 0;
+
+        return `
+          <div class="bg-[#120c24] border border-[#2d1f54] rounded-2xl p-4 flex flex-col justify-between space-y-3 shadow-md shadow-purple-950/20">
+            <div class="flex items-center justify-between border-b border-[#2d1f54] pb-2.5">
+              <div>
+                <h3 class="font-bold ${s.text} text-base">${s.name}</h3>
+                <span class="text-[11px] font-mono text-purple-300/70">${sTotal} Chapters</span>
+              </div>
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-[#090612] border ${s.border} ${s.text} font-bold">
+                ${sReady}/${sTotal} Ready
+              </span>
+            </div>
+
+            <div class="space-y-2.5 text-xs font-mono">
+              <div>
+                <div class="flex justify-between text-purple-100 mb-1">
+                  <span>Revised:</span>
+                  <span>${sRev}/${sTotal} (${revPct}%)</span>
+                </div>
+                <div class="w-full h-1.5 bg-[#090612] rounded-full overflow-hidden">
+                  <div style="width: ${revPct}%" class="h-full ${s.bar}"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-purple-100 mb-1">
+                  <span>PYQs Done:</span>
+                  <span>${sPyq}/${sTotal} (${pyqPct}%)</span>
+                </div>
+                <div class="w-full h-1.5 bg-[#090612] rounded-full overflow-hidden">
+                  <div style="width: ${pyqPct}%" class="h-full bg-gradient-to-r from-purple-500 to-fuchsia-400"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-[#2d1f54]/80 flex justify-between text-[11px] font-mono text-purple-300/75">
+              <span>PYQs Solved:</span>
+              <span class="text-white font-semibold">${sQs} Qs</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Daily Urgent Queue
+      const urgentItems = [];
+      appState.chapters.forEach(c => {
+        const hasRev = c.rev1 || c.rev2 || c.rev3;
+        const days = getDaysAgo(c.lastRevised);
+        if (hasRev && !c.pyqDone) {
+          urgentItems.push({ ch: c, reason: 'Revised • PYQs Pending!', tone: 'amber', actionType: 'pyq' });
+        } else if (hasRev && days !== null && days > 14) {
+          urgentItems.push({ ch: c, reason: `Stale: Revised ${days}d ago`, tone: 'rose', actionType: 'rev' });
+        }
+      });
+
+      document.getElementById('urgentCountBadge').textContent = `${urgentItems.length} Chapter${urgentItems.length === 1 ? '' : 's'}`;
+      const tabUrgentBadge = document.getElementById('tabUrgentBadge');
+      if (tabUrgentBadge) tabUrgentBadge.textContent = String(urgentItems.length);
+      const urgentGrid = document.getElementById('urgentQueueGrid');
+
+      if (urgentItems.length === 0) {
+        urgentGrid.innerHTML = `
+          <div class="col-span-full bg-[#090612]/80 border border-[#2d1f54] rounded-xl p-3.5 text-xs font-mono text-purple-300/80 flex items-center justify-between">
+            <span>✓ Queue clear! No revised chapters are missing PYQ practice or overdue (&gt;14d) for refresh.</span>
+            <span class="text-purple-300 font-bold">KEEP EXECUTING</span>
+          </div>
+        `;
+      } else {
+        urgentGrid.innerHTML = urgentItems.slice(0, 8).map(item => {
+          const badgeClass = item.tone === 'rose'
+            ? 'text-rose-400 bg-rose-500/10 border-rose-500/30'
+            : 'text-purple-200 bg-purple-500/15 border-purple-400/35';
+          const btnHtml = item.actionType === 'pyq'
+            ? `<button onclick="togglePractice('${item.ch.id}', 'pyqDone')" class="text-[11px] font-mono text-purple-300 hover:underline">Mark PYQs Done →</button>`
+            : `<button onclick="stampRevisedToday('${item.ch.id}')" class="text-[11px] font-mono text-fuchsia-300 hover:underline">Quick Refresh →</button>`;
+
+          return `
+            <div class="bg-[#090612] border border-[#2d1f54] rounded-xl p-3 flex flex-col justify-between gap-2">
+              <div>
+                <div class="flex items-center justify-between gap-1 text-[10px] font-mono">
+                  <span class="text-purple-300/70">${item.ch.subject}</span>
+                  <span class="px-1.5 py-0.5 rounded border ${badgeClass}">${item.reason}</span>
+                </div>
+                <div class="text-xs font-semibold text-white mt-1.5 line-clamp-2">${item.ch.name}</div>
+              </div>
+              <div class="pt-1.5 border-t border-[#2d1f54]/80 flex items-center justify-between">
+                <span class="text-[10px] font-mono text-purple-400/60">${item.ch.tag}</span>
+                ${btnHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function renderChapterCards() {
+      const { subject, cls, roi, status, sortBy, search } = appState.filters;
+      const q = search.toLowerCase().trim();
+
+      const indexed = appState.chapters.map((ch, idx) => ({
+        ch,
+        idx,
+        roiScore: getChapterRoiScore(ch, idx)
+      }));
+
+      const filtered = indexed.filter(({ ch }) => {
+        if (subject !== 'ALL' && ch.subject !== subject) return false;
+        if (cls !== 'ALL' && ch.cls !== cls) return false;
+        if (roi !== 'ALL' && ch.tag !== roi) return false;
+
+        if (status === 'NEEDS_REVISION') {
+          if (ch.rev1 || ch.rev2 || ch.rev3) return false;
+        } else if (status === 'PRACTICE_PENDING') {
+          if (ch.pyqDone) return false;
+        } else if (status === 'STALE_REVISION') {
+          const days = getDaysAgo(ch.lastRevised);
+          if (days === null || days <= 14) return false;
+        } else if (status !== 'ALL') {
+          if (ch.status !== status) return false;
+        }
+
+        if (q) {
+          const hay = `${ch.name} ${ch.subject} ${ch.cls} ${ch.tag} ${ch.note}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a, b) => {
+        if (sortBy === 'ROI_DESC') return b.roiScore - a.roiScore || a.idx - b.idx;
+        if (sortBy === 'URGENT_DESC') return getUrgencyPriority(b.ch) - getUrgencyPriority(a.ch) || b.roiScore - a.roiScore;
+        if (sortBy === 'PYQS_DESC') return (Number(b.ch.pyqCount) || 0) - (Number(a.ch.pyqCount) || 0) || b.roiScore - a.roiScore;
+        if (sortBy === 'REV_ASC') {
+          const rA = (a.ch.rev1 ? 1 : 0) + (a.ch.rev2 ? 1 : 0) + (a.ch.rev3 ? 1 : 0);
+          const rB = (b.ch.rev1 ? 1 : 0) + (b.ch.rev2 ? 1 : 0) + (b.ch.rev3 ? 1 : 0);
+          return rA - rB || b.roiScore - a.roiScore;
+        }
+        if (sortBy === 'ALPHA_ASC') return a.ch.name.localeCompare(b.ch.name);
+        return a.idx - b.idx;
+      });
+
+      document.getElementById('showingCountText').textContent = `Showing ${filtered.length} of ${appState.chapters.length} chapters`;
+
+      const container = document.getElementById('chapterCardsContainer');
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full bg-[#120c24] border border-[#2d1f54] rounded-2xl p-6 text-center space-y-1.5">
+            <div class="text-sm font-semibold text-purple-100">No chapters match your current filter criteria.</div>
+            <div class="text-xs text-purple-300/70 font-mono">Try clearing the search query or switching ROI, Subject, or Status filters.</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(({ ch: c, roiScore }) => {
+        const subjColor = c.subject === 'Physics'
+          ? 'text-purple-300 bg-purple-500/15 border-purple-400/35'
+          : c.subject === 'Chemistry'
+          ? 'text-fuchsia-300 bg-fuchsia-500/15 border-fuchsia-400/35'
+          : 'text-violet-300 bg-violet-500/15 border-violet-400/35';
+
+        const tagColor = c.tag === 'High ROI'
+          ? 'text-fuchsia-200 bg-fuchsia-500/15 border-fuchsia-400/40'
+          : c.tag === 'Scoring'
+          ? 'text-purple-200 bg-purple-500/15 border-purple-400/35'
+          : 'text-purple-200/80 bg-[#191130] border-[#2d1f54]';
+
+        const statusStyle = c.status === 'Exam-Ready'
+          ? 'bg-purple-500/25 text-purple-200 border-purple-400/60'
+          : c.status === 'Revised'
+          ? 'bg-violet-500/20 text-violet-200 border-violet-400/50'
+          : c.status === 'In Progress'
+          ? 'bg-fuchsia-500/15 text-fuchsia-200 border-fuchsia-400/40'
+          : 'bg-[#191130] text-purple-300/70 border-[#2d1f54]';
+
+        const daysAgo = getDaysAgo(c.lastRevised);
+        let revDateBadge = `<span class="text-purple-400/60">Unrevised</span>`;
+        if (c.lastRevised) {
+          const staleWarn = daysAgo > 14 ? 'text-rose-400 font-semibold' : 'text-purple-300';
+          revDateBadge = `<span class="${staleWarn}">${daysAgo === 0 ? 'Today' : daysAgo + 'd ago'}</span>`;
+        }
+
+        const revBtnClass = (active) => active
+          ? 'bg-violet-600 text-white font-bold border-purple-400 shadow-sm shadow-purple-950'
+          : 'bg-[#090612] text-purple-300/75 border-[#2d1f54] hover:border-purple-400/50 hover:text-white';
+
+        return `
+          <div class="bg-[#120c24] border border-[#2d1f54] hover:border-purple-500/50 rounded-xl p-3 flex flex-col justify-between gap-2 transition shadow-sm shadow-purple-950/20">
+            <!-- Compact Card Header -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between gap-1.5">
+                <div class="flex flex-wrap items-center gap-1 text-[10px] font-mono">
+                  <span class="px-1.5 py-0.5 rounded border ${subjColor}">${c.subject === 'Mathematics' ? 'Maths' : c.subject}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-[#090612] border border-[#2d1f54] text-purple-300/80">${c.cls === 'Class 11' ? '11th' : '12th'}</span>
+                  <span class="px-1.5 py-0.5 rounded border ${tagColor}">${c.tag} • ${roiScore}</span>
+                </div>
+
+                <select onchange="updateStatusDirect('${c.id}', this.value)" aria-label="Mastery Status" class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md border ${statusStyle} focus:outline-none cursor-pointer shrink-0">
+                  <option value="Untouched" class="bg-[#120c24] text-purple-200" ${c.status === 'Untouched' ? 'selected' : ''}>Untouched</option>
+                  <option value="In Progress" class="bg-[#120c24] text-fuchsia-200" ${c.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                  <option value="Revised" class="bg-[#120c24] text-violet-200" ${c.status === 'Revised' ? 'selected' : ''}>Revised</option>
+                  <option value="Exam-Ready" class="bg-[#120c24] text-purple-100" ${c.status === 'Exam-Ready' ? 'selected' : ''}>Exam-Ready</option>
+                </select>
+              </div>
+
+              <h4 class="font-bold text-white text-xs sm:text-sm leading-snug line-clamp-1" title="${c.name.replace(/"/g, '&quot;')}">${c.name}</h4>
+            </div>
+
+            <!-- Compact Revision + Two Practice Checkboxes -->
+            <div class="bg-[#090612]/90 border border-[#2d1f54] rounded-lg px-2.5 py-2 space-y-2">
+              <div class="flex items-center justify-between gap-1.5">
+                <div class="flex items-center gap-1">
+                  <button onclick="toggleRev('${c.id}', 'rev1')" class="px-2 py-0.5 rounded border text-[10px] font-mono transition ${revBtnClass(c.rev1)}">R1</button>
+                  <button onclick="toggleRev('${c.id}', 'rev2')" class="px-2 py-0.5 rounded border text-[10px] font-mono transition ${revBtnClass(c.rev2)}">R2</button>
+                  <button onclick="toggleRev('${c.id}', 'rev3')" class="px-2 py-0.5 rounded border text-[10px] font-mono transition ${revBtnClass(c.rev3)}">R3</button>
+                </div>
+                <div class="text-[10px] font-mono truncate">
+                  ${revDateBadge}
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between gap-2 pt-1.5 border-t border-[#2d1f54]/80 text-[11px]">
+                <div class="flex items-center gap-2.5">
+                  <label class="inline-flex items-center gap-1 cursor-pointer select-none">
+                    <input type="checkbox" ${c.pyqDone ? 'checked' : ''} onchange="togglePractice('${c.id}', 'pyqDone')" class="w-3.5 h-3.5 accent-purple-500 rounded cursor-pointer">
+                    <span class="font-mono text-[10px] ${c.pyqDone ? 'text-purple-200 font-semibold' : 'text-purple-200/80'}">PYQs</span>
+                  </label>
+
+                  <label class="inline-flex items-center gap-1 cursor-pointer select-none">
+                    <input type="checkbox" ${c.completed ? 'checked' : ''} onchange="togglePractice('${c.id}', 'completed')" class="w-3.5 h-3.5 accent-fuchsia-400 rounded cursor-pointer">
+                    <span class="font-mono text-[10px] ${c.completed ? 'text-fuchsia-200 font-semibold' : 'text-purple-200/80'}">COMPLETED</span>
+                  </label>
+                </div>
+
+                <div class="flex items-center gap-1 font-mono text-[10px]">
+                  <input type="number" min="0" max="999" value="${c.pyqCount}" onchange="updatePyqCount('${c.id}', this.value)" title="Number of PYQs practiced" class="w-12 bg-[#120c24] border border-[#2d1f54] rounded px-1 py-0.5 text-center text-purple-200 font-bold focus:outline-none focus:border-purple-400">
+                  <span class="text-purple-400/70">Qs</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slim Formula / Trap Note Input -->
+            <input type="text" value="${c.note.replace(/"/g, '&quot;')}" oninput="updateChapterNote('${c.id}', this.value)" placeholder="Formula / trap note..." class="w-full bg-[#090612]/75 border border-[#2d1f54] focus:border-purple-400/70 rounded-lg px-2.5 py-1 text-[11px] text-purple-100 placeholder-purple-400/45 focus:outline-none transition">
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAll() {
+      renderAnalyticsOnly();
+      renderChapterCards();
+      setWorkspaceTab(appState.activeTab);
+      applyTheme(appState.theme);
+    }
+
+    // =========================================================================
+    // 8. FILTER & SEARCH EVENT LISTENERS
+    // =========================================================================
+    document.querySelectorAll('.subj-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        appState.filters.subject = btn.dataset.subj;
+        document.querySelectorAll('.subj-btn').forEach(b => {
+          b.className = 'subj-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition';
+        });
+        btn.className = 'subj-btn px-2.5 py-1 rounded-lg bg-violet-600 text-white font-bold transition shadow-sm shadow-purple-900/50';
+        renderChapterCards();
+        applyTheme(appState.theme);
+      });
+    });
+
+    document.querySelectorAll('.cls-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        appState.filters.cls = btn.dataset.cls;
+        document.querySelectorAll('.cls-btn').forEach(b => {
+          b.className = 'cls-btn px-2.5 py-1 rounded-lg text-purple-300/75 hover:text-white transition';
+        });
+        btn.className = 'cls-btn px-2.5 py-1 rounded-lg bg-purple-500/25 text-purple-100 border border-purple-400/40 font-semibold transition';
+        renderChapterCards();
+        applyTheme(appState.theme);
+      });
+    });
+
+    document.getElementById('roiFilterSelect').addEventListener('change', (e) => {
+      appState.filters.roi = e.target.value;
+      renderChapterCards();
+      applyTheme(appState.theme);
+    });
+
+    document.getElementById('statusFilterSelect').addEventListener('change', (e) => {
+      appState.filters.status = e.target.value;
+      renderChapterCards();
+      applyTheme(appState.theme);
+    });
+
+    document.getElementById('sortBySelect').addEventListener('change', (e) => {
+      appState.filters.sortBy = e.target.value;
+      renderChapterCards();
+      applyTheme(appState.theme);
+    });
+
+    document.getElementById('chapterSearchInput').addEventListener('input', (e) => {
+      appState.filters.search = e.target.value;
+      renderChapterCards();
+      applyTheme(appState.theme);
+    });
+
+    // =========================================================================
+    // 9. TOAST HELPER & BOOTSTRAP
+    // =========================================================================
+    function showToast(msg, tone = 'purple') {
+      const box = document.getElementById('toastBox');
+      const el = document.createElement('div');
+      const styles = tone === 'rose'
+        ? 'bg-[#120c24] border-rose-500/50 text-rose-300'
+        : tone === 'amber'
+        ? 'bg-[#120c24] border-amber-500/50 text-amber-300'
+        : 'bg-[#120c24] border-purple-400/50 text-purple-200';
+      el.className = `pointer-events-auto px-4 py-2.5 rounded-xl border shadow-2xl font-mono text-xs ${styles} transition-opacity duration-300`;
+      el.textContent = msg;
+      box.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+      }, 2800);
+    }
+
+    // Boot
+    loadAppState();
+    updateBackupStatusUI();
+    renderAll();
+  </script>
+</body>
+</html>
